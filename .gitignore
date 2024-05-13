@@ -348,3 +348,12 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+*.clef
+
+# Custom
+/artifacts
+*.GhostDoc.xml
+coverage.xml
+coverage.opencover.xml
+*.received.txt
+*.txt

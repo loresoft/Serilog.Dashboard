@@ -1,0 +1,48 @@
+@using Microsoft.Extensions.Options
+
+<nav id="navbar-main"
+     class="navbar navbar-expand-lg navbar-light navbar-default fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand p-0"
+           href="@Options.Value.RoutePrefix">
+            @Options.Value.DashboardName
+        </a>
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbar-main-menu"
+                aria-controls="navbar-main-menu"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse"
+             id="navbar-main-menu">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a id="navbar-main-logs-link"
+                       class="nav-link"
+                       href="@Options.Value.RoutePrefix">
+                        Logs
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav"
+                style="margin-right: 15px;">
+                <li class="nav-item">
+                    <a id="navbar-main-return-link"
+                       class="nav-link"
+                       href="@Options.Value.HomeUrl">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Return Home
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+@code {
+    [Inject]
+    public IOptions<DashboardOptions> Options { get; set; } = null!;
+}

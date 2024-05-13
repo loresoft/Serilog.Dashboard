@@ -1,0 +1,31 @@
+@switch (Name)
+{
+    case "Warning":
+        <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+        break;
+    case "Error":
+    case "Critical":
+    case "Fatal":
+    case "Failed":
+        <i class="bi bi-x-circle-fill text-danger"></i>
+        break;
+    case "Information":
+        <i class="bi bi-info-circle-fill text-primary"></i>
+        break;
+    case "Debug":
+    case "Verbose":
+    case "Trace":
+        <i class="bi bi-info-circle-fill text-secondary"></i>
+        break;
+    case "Success":
+        <i class="bi bi-check-circle-fill text-success"></i>
+        break;
+    default:
+        <i class="bi bi-question-circle-fill text-secondary"></i>
+        break;
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public required string Name { get; set; }
+}
