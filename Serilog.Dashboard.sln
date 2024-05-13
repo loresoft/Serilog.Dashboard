@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{87D23873
 		test\Directory.Build.props = test\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Dashboard.TableStorage", "src\Serilog.Dashboard.AzureTableStorage\Serilog.Dashboard.TableStorage.csproj", "{7E7EF123-773D-4F98-9BCF-DC9BB957EDB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Dashboard.TableStorage", "src\Serilog.Dashboard.TableStorage\Serilog.Dashboard.TableStorage.csproj", "{7E7EF123-773D-4F98-9BCF-DC9BB957EDB8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Dashboard.CompactJson", "src\Serilog.Dashboard.CompactJson\Serilog.Dashboard.CompactJson.csproj", "{DE9794DC-DAF3-4E78-94C8-D102E52ACEE5}"
 EndProject
