@@ -1,0 +1,245 @@
+@using Microsoft.AspNetCore.Routing
+@using Microsoft.Extensions.Options
+@using Serilog.Dashboard.Provider
+@using Serilog.Dashboard.Provider.Extensions
+
+<style>
+    .form-label-inline {
+        position: relative;
+    }
+
+        .form-label-inline > label {
+            position: absolute;
+            top: .25rem;
+            left: .75rem;
+            z-index: 2;
+            color: rgba(var(--bs-body-color-rgb), 0.65);
+            font-weight: 400;
+            line-height: var(--bs-body-line-height);
+            ;
+            overflow: hidden;
+            text-align: start;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            pointer-events: none;
+            border: var(--bs-border-width) solid transparent;
+            transform-origin: 0 0;
+            transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
+            padding: 0 .25em;
+        }
+
+        .form-label-inline > .form-control::placeholder,
+        .form-label-inline > .form-control-plaintext::placeholder {
+            color: transparent;
+        }
+
+        .form-label-inline > .form-control:focus ~ label,
+        .form-label-inline > .form-control:not(:placeholder-shown) ~ label,
+        .form-label-inline > .form-control-plaintext ~ label,
+        .form-label-inline > .form-select ~ label {
+            color: rgba(var(--bs-body-color-rgb), 0.65);
+            transform: scale(0.85) translateY(-1.2rem) translateX(0.15rem);
+            background-color: var(--bs-body-bg);
+        }
+
+        .form-label-inline > .form-control-plaintext ~ label {
+            border-width: var(--bs-border-width) 0;
+        }
+</style>
+
+<div class="card">
+    <form id="log-search-form"
+          name="log-search-form"
+          role="form"
+          method="get">
+
+        <div class="card-header d-flex align-items-center">
+            <h5 class="me-auto">
+                <i class="bi bi-files"></i> Logs
+            </h5>
+            @if (Sources != null && Sources.Count > 1)
+            {
+                <div class="form-label-inline mx-1">
+                    <select id="DataSource"
+                            name="DataSource"
+                            class="form-select"
+                            autocomplete="off"
+                            onchange="this.form.submit()"
+                            title="Data Source for Logs">
+                        @foreach (var source in Sources)
+                        {
+                            <option @key="source"
+                                    value="@source"
+                                    selected="@(Request.DataSource == source)">
+                                @source
+                            </option>
+                        }
+                    </select>
+                    <label for="DataSource">Data Source</label>
+                </div>
+            }
+
+            <div class="form-label-inline mx-1">
+                <input type="text"
+                       class="form-control"
+                       placeholder="Source Context"
+                       autocomplete="off"
+                       spellcheck="false"
+                       onblur="this.form.submit()"
+                       id="SourceContext"
+                       name="SourceContext"
+                       value="@Request.SourceContext">
+                <label for="SourceContext">Source Context</label>
+            </div>
+            <div class="form-label-inline mx-1">
+                <input type="text"
+                       class="form-control"
+                       placeholder="TraceId"
+                       autocomplete="off"
+                       spellcheck="false"
+                       onblur="this.form.submit()"
+                       id="TraceId"
+                       name="TraceId"
+                       value="@Request.TraceId">
+                <label for="TraceId">Trace Id</label>
+            </div>
+            <div class="form-label-inline mx-1">
+                <select id="Level"
+                        name="Level"
+                        class="form-select"
+                        autocomplete="off"
+                        onchange="this.form.submit()"
+                        title="Filter by log level">
+                    @foreach (var level in Levels)
+                    {
+                        <option @key="level.Key"
+                                value="@level.Key"
+                                selected="@(Request.Level == level.Key)">
+                            @level.Value
+                        </option>
+                    }
+                </select>
+                <label for="Level">Level</label>
+            </div>
+            <div class="form-label-inline mx-1">
+                <input type="date"
+                       id="Date"
+                       name="Date"
+                       value="@Request.Date?.ToString("yyyy-MM-dd")"
+                       class="form-control"
+                       onblur="this.form.submit()"
+                       placeholder="Date" />
+                <label for="Date">Date</label>
+            </div>
+            <button id="SearchButton mx-1"
+                    class="btn btn-sm btn-outline-secondary"
+                    type="submit"
+                    title="Search">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+
+        <input type="hidden" name="PageSize" value="@Request.PageSize" />
+    </form>
+
+    <div class="card-body p-0">
+        <LogViewer Logs="@Result.Data" />
+    </div>
+    <div class="card-footer">
+        <nav aria-label="Pagination">
+            <ul class="justify-content-md-end m-1 pagination">
+                @if (HasFirstPage())
+                {
+                    <li class="page-item">
+                        <form id="log-first-page-form"
+                              name="log-first-page-form"
+                              role="form"
+                              method="get">
+
+                            <input type="hidden" name="SourceContext" value="@Request.SourceContext" />
+                            <input type="hidden" name="TraceId" value="@Request.TraceId" />
+                            <input type="hidden" name="Level" value="@Request.Level" />
+                            <input type="hidden" name="Date" value="@Request.Date?.ToString("yyyy-MM-dd")" />
+                            <input type="hidden" name="PageSize" value="@Request.PageSize" />
+
+                            <button class="page-link" type="submit">
+                                First Page
+                            </button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            First Page
+                        </span>
+                    </li>
+                }
+                @if (HasNextPage())
+                {
+                    <li class="page-item">
+                        <form id="log-next-page-form"
+                              name="log-next-page-form"
+                              role="form"
+                              method="get">
+
+                            <input type="hidden" name="SourceContext" value="@Request.SourceContext" />
+                            <input type="hidden" name="TraceId" value="@Request.TraceId" />
+                            <input type="hidden" name="Level" value="@Request.Level" />
+                            <input type="hidden" name="Date" value="@Request.Date?.ToString("yyyy-MM-dd")" />
+                            <input type="hidden" name="PageSize" value="@Request.PageSize" />
+                            <input type="hidden" name="ContinuationToken" value="@Result.ContinuationToken" />
+
+                            <button class="page-link" type="submit">
+                                Next Page
+                            </button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            Next Page
+                        </span>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public required LogEventRequest Request { get; set; }
+
+    [Parameter, EditorRequired]
+    public required LogEventResult Result { get; set; }
+
+    [Parameter]
+    public IReadOnlySet<string>? Sources { get; set; }
+
+    protected Dictionary<string, string> Levels = new Dictionary<string, string>
+    {
+        { "", "- All -" },
+        { "Trace", "Trace" },
+        { "Debug", "Debug" },
+        { "Information", "Information" },
+        { "Warning", "Warning" },
+        { "Error", "Error" },
+        { "Critical", "Critical" },
+    };
+
+    protected bool HasFirstPage()
+    {
+        return Request.ContinuationToken.HasValue()
+            || Request.Page > 1;
+    }
+
+    protected bool HasNextPage()
+    {
+        return Result.ContinuationToken.HasValue()
+            || Result.Total > Result.Data?.Count;
+    }
+}

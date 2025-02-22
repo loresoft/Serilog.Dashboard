@@ -1,13 +1,10 @@
-
-using Azure.Data.Tables;
-
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using Sample.Shared;
 
 using Serilog;
-using Serilog.Dashboard;
-using Serilog.Dashboard.Providers;
+using Serilog.Dashboard.Middleware;
+using Serilog.Dashboard.Provider.TableStorage;
 using Serilog.Events;
 
 namespace Sample.WebService;
@@ -95,7 +92,7 @@ public static class Program
 
         builder.Services
             .AddSerilogDashboard(options => options.HomeUrl = "/swagger")
-            .AddTableStorage("StorageAccount", "SampleLogs");
+            .AddTableStorage("StorageAccount", "ApplicationLogsDevelopment", "ApplicationLogsStaging", "ApplicationLogsProduction");
     }
 
     private static void ConfigureMiddleware(WebApplication app)

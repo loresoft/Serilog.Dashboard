@@ -1,0 +1,24 @@
+@layout MainLayout
+
+@using Microsoft.AspNetCore.Routing
+@using Microsoft.Extensions.Options
+
+<PageTitle>@Options.Value.DashboardName</PageTitle>
+
+<div class="container-fluid">
+    <Dashboard Request="Request" Result="Result" Sources="Sources" />
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public required LogEventRequest Request { get; set; }
+
+    [Parameter, EditorRequired]
+    public required LogEventResult Result { get; set; }
+
+    [Parameter]
+    public IReadOnlySet<string>? Sources { get; set; }
+
+    [Inject]
+    public IOptions<DashboardOptions> Options { get; set; } = null!;
+}
