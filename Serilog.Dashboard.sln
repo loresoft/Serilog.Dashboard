@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Dashboard.Component
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Dashboard.Provider", "src\Serilog.Dashboard.Provider\Serilog.Dashboard.Provider.csproj", "{4E64AA6E-5F19-4D4B-8185-78473BE26BA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Dashboard.Provider.TableStorage.Tests", "test\Serilog.Dashboard.Provider.TableStorage.Tests\Serilog.Dashboard.Provider.TableStorage.Tests.csproj", "{E6529A6A-1B1C-4108-A7A7-BF7E00A34D10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{4E64AA6E-5F19-4D4B-8185-78473BE26BA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E64AA6E-5F19-4D4B-8185-78473BE26BA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E64AA6E-5F19-4D4B-8185-78473BE26BA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6529A6A-1B1C-4108-A7A7-BF7E00A34D10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6529A6A-1B1C-4108-A7A7-BF7E00A34D10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6529A6A-1B1C-4108-A7A7-BF7E00A34D10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6529A6A-1B1C-4108-A7A7-BF7E00A34D10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +81,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4C9B9F17-C64F-452B-A86A-1771F960092A} = {37FC7EC8-69EC-4D39-BE5D-479CB80A8D76}
 		{054544CD-3F5F-40A4-A8BD-5F057816B29E} = {37FC7EC8-69EC-4D39-BE5D-479CB80A8D76}
+		{E6529A6A-1B1C-4108-A7A7-BF7E00A34D10} = {87D23873-47D6-488E-8BF3-3187076692C8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {041FE200-288E-41D8-AB4B-847C9BB96C0E}
