@@ -60,7 +60,7 @@ jobs:
 
       - name: Publish Container Image
         if: success() && github.event_name != 'pull_request'
-        run: dotnet publish --configuration Release --no-build /p:PublishProfile=github
+        run: dotnet publish --os linux --arch x64 --configuration Release --no-build /p:PublishProfile=github
 
       - name: Create Packages
         if: success() && github.event_name != 'pull_request'
