@@ -9,7 +9,7 @@ public class TableStorageProviderTests(ITestOutputHelper output, DependencyFixtu
     [Fact]
     public void ResolveRepository()
     {
-        var repository = Services.GetRequiredKeyedService<ILogEventEntityRepository>("TestLogs");
+        var repository = Services.GetRequiredService<ILogEventProviderFactory>();
         Assert.NotNull(repository);
     }
 }

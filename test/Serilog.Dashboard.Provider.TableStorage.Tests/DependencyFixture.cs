@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 
 using XUnit.Hosting;
 
@@ -11,6 +12,8 @@ public class DependencyFixture : TestApplicationFixture
         base.ConfigureApplication(builder);
 
         var services = builder.Services;
+
+        builder.Services.TryAddSingleton<ILogEventProviderFactory, LogEventProviderFactory>();
 
         services
             .AddDashboardTableStorage("StorageAccount", "TestLogs");
