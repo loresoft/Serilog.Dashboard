@@ -1,3 +1,8 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+
+using Serilog.Dashboard.Provider.Options;
+
 namespace Serilog.Dashboard.Provider;
 
 public interface ILogEventProvider

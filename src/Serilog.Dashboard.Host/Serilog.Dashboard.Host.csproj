@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
+    <ContainerRuntimeIdentifier>linux-x64</ContainerRuntimeIdentifier>
+    <EnableSdkContainerDebugging>True</EnableSdkContainerDebugging>
+    <ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:9.0</ContainerBaseImage>
+    <ContainerRegistry>ghcr.io</ContainerRegistry>
+    <ContainerRepository>loresoft/Serilog.Dashboard</ContainerRepository>
+    <DockerfileContext>..\..</DockerfileContext>
+    <UserSecretsId>299e7652-b33f-4c80-9d78-2a2fdb9d09be</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ContainerPort Include="8081" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Serilog.Dashboard.Components\Serilog.Dashboard.Components.csproj" />
+    <ProjectReference Include="..\Serilog.Dashboard.Provider.CompactJson\Serilog.Dashboard.Provider.CompactJson.csproj" />
+    <ProjectReference Include="..\Serilog.Dashboard.Provider.TableStorage\Serilog.Dashboard.Provider.TableStorage.csproj" />
+  </ItemGroup>
+
+</Project>

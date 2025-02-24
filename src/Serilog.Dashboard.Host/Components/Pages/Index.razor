@@ -1,0 +1,81 @@
+@page "/"
+
+@using Microsoft.Extensions.Options
+@using Serilog.Dashboard.Provider.Options
+
+<PageTitle>@Options.Value.Name</PageTitle>
+
+<div class="container-fluid">
+    <Dashboard Request="Request"
+               Result="Result"
+               Sources="Sources" />
+</div>
+
+
+@code {
+
+    [SupplyParameterFromQuery]
+    public string? DataSource { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? ContinuationToken { get; set; }
+
+    [SupplyParameterFromQuery]
+    public int? Page { get; set; }
+
+    [SupplyParameterFromQuery]
+    public DateOnly? Date { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? Level { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? SourceContext { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? TraceId { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? SpanId { get; set; }
+
+    [SupplyParameterFromQuery]
+    public int? PageSize { get; set; }
+
+
+    [Inject]
+    public required ILogEventProviderFactory LogEventProviderFactory { get; set; }
+
+    [Inject]
+    public required IOptions<DashboardOptions> Options { get; set; }
+
+
+    protected LogEventRequest? Request { get; set; }
+
+    protected LogEventResult? Result { get; set; }
+
+    protected IReadOnlySet<string>? Sources { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        var provider = LogEventProviderFactory.CreateProvider();
+
+        Request = new LogEventRequest
+            {
+                DataSource = DataSource,
+                ContinuationToken = ContinuationToken,
+                Page = Page,
+                Date = Date ?? DateOnly.FromDateTime(DateTime.Now),
+                Level = Level,
+                SourceContext = SourceContext,
+                TraceId = TraceId,
+                SpanId = SpanId,
+                PageSize = PageSize ?? 100
+            };
+
+        Sources = await provider.GetSources();
+        Result = await provider.GetLogs(Request);
+    }
+}

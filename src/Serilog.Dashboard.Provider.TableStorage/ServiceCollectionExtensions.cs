@@ -1,8 +1,10 @@
 using Azure.Data.Tables;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 using Serilog.Dashboard.Provider.Options;
 
@@ -26,31 +28,42 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDashboardTableStorage(
         this IServiceCollection services,
         string nameOrConnectionString,
-        params IEnumerable<string> sourceTables)
+        params IEnumerable<string>? sourceTables)
     {
-        var tables = new HashSet<string>(sourceTables);
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentException.ThrowIfNullOrEmpty(nameOrConnectionString);
 
-        if (tables.Count == 0)
-            tables.Add("LogEvent");
+        var tables = new HashSet<string>(sourceTables ?? []);
+
+
+        services.TryAddSingleton<ILogEventProvider, TableStorageProvider>();
 
         services
             .AddOptions<TableStorageOptions>()
             .Configure(options => options.TableSources = tables);
 
-        services.TryAddSingleton<ILogEventProvider, TableStorageProvider>();
+        return services;
+    }
 
-        foreach (var table in tables)
-        {
-            services.AddTableServiceClient(nameOrConnectionString, table);
-
-            services.TryAddKeyedSingleton<ILogEventEntityRepository>(table, (sp, key) =>
+    public static IServiceCollection AddTableStorageProvider(this IServiceCollection services)
+    {
+        services.TryAddKeyedSingleton(
+            serviceKey: TableStorageOptions.ProviderName,
+            implementationFactory: (sp, _) =>
             {
-                return new LogEventEntityRepository(
-                    logFactory: sp.GetRequiredService<ILoggerFactory>(),
-                    tableServiceClient: sp.GetRequiredKeyedService<TableServiceClient>(key),
-                    tableName: table);
-            });
-        }
+                var options = sp.GetRequiredService<IOptions<DashboardOptions>>();
+                var connectionString = sp.ResolveConnectionString(options.Value.ConnectionString);
+
+                return new TableServiceClient(connectionString);
+            }
+        );
+
+        services.TryAddKeyedSingleton<ILogEventProvider, TableStorageProvider>(TableStorageOptions.ProviderName);
+
+        services.AddOptions<TableStorageOptions>()
+            .Configure<IOptions<DashboardOptions>>(static (storageOptions, dashboardOptions)
+                => storageOptions.TableSources = [.. dashboardOptions.Value.GetSources()]
+            );
 
         return services;
     }

@@ -1,0 +1,21 @@
+@if (!IgnoreEmpty || !string.IsNullOrEmpty(Value))
+{
+    <input type="hidden"
+           name="@Name"
+           value="@Value"
+           @attributes="@Attributes" />
+}
+
+@code {
+    [Parameter]
+    public required string Name { get; set; }
+
+    [Parameter]
+    public string? Value { get; set; }
+
+    [Parameter]
+    public bool IgnoreEmpty { get; set; } = true;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? Attributes { get; set; }
+}

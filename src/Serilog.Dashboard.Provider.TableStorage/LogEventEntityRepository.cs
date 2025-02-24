@@ -42,6 +42,8 @@ public class LogEventEntityRepository : TableRepository<LogEventEntity>, ILogEve
         if (request.SpanId.HasValue())
             filter += $" and (SpanId eq '{request.SpanId}')";
 
-        return await FindPageAsync(filter, request.ContinuationToken, request.PageSize, cancellationToken);
+        var result = await FindPageAsync(filter, request.ContinuationToken, request.PageSize, cancellationToken);
+
+        return result;
     }
 }

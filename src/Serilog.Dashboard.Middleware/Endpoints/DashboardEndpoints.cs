@@ -23,7 +23,7 @@ public class DashboardEndpoints : IDashboardEndpoints
     public void AddRoutes(IEndpointRouteBuilder builder)
     {
         builder
-            .MapGet(_options.Value.RoutePrefix, GetLogs)
+            .MapGet(_options.Value.Route, GetLogs)
             .WithName(DashboardOptions.RouteName)
             .ExcludeFromDescription();
     }

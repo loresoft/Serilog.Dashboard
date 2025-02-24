@@ -51,6 +51,17 @@ jobs:
           file: "${{github.workspace}}/test/*/TestResults/*/coverage.info"
           format: lcov
 
+      - name: GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Container Image
+        if: success() && github.event_name != 'pull_request'
+        run: dotnet publish --configuration Release --no-build /p:PublishProfile=github
+
       - name: Create Packages
         if: success() && github.event_name != 'pull_request'
         run: dotnet pack --configuration Release --no-build --output "${{env.BUILD_PATH}}"

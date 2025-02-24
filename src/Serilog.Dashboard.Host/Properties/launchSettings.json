@@ -1,0 +1,34 @@
+{
+  "profiles": {
+    "https": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DASHBOARD__NAME": "Container Dashboard",
+        "DASHBOARD__PROVIDER": "TableStorage",
+        "DASHBOARD__CONNECTIONSTRING": "UseDevelopmentStorage=true",
+        "DASHBOARD__DATASOURCES": "ApplicationLogsDevelopment;MagnoliaLogsDevelopment"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7112;http://localhost:5140"
+    },
+    "Container": {
+      "commandName": "SdkContainer",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_HTTPS_PORTS": "8081",
+        "ASPNETCORE_HTTP_PORTS": "8080",
+        "DASHBOARD__NAME": "Container Dashboard",
+        "DASHBOARD__PROVIDER": "TableStorage",
+        "DASHBOARD__CONNECTIONSTRING": "UseDevelopmentStorage=true",
+        "DASHBOARD__DATASOURCES": "LogEvent"
+      },
+      "publishAllPorts": true,
+      "useSSL": true
+    }
+  },
+  "$schema": "https://json.schemastore.org/launchsettings.json"
+}
