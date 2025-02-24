@@ -1,19 +1,30 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
-    <ContainerRuntimeIdentifier>linux-x64</ContainerRuntimeIdentifier>
     <EnableSdkContainerDebugging>True</EnableSdkContainerDebugging>
-    <ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:9.0</ContainerBaseImage>
-    <ContainerRegistry>ghcr.io</ContainerRegistry>
-    <ContainerRepository>loresoft/Serilog.Dashboard</ContainerRepository>
     <DockerfileContext>..\..</DockerfileContext>
     <UserSecretsId>299e7652-b33f-4c80-9d78-2a2fdb9d09be</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <ContainerRuntimeIdentifier>linux-x64</ContainerRuntimeIdentifier>
+    <ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:9.0</ContainerBaseImage>
+    <ContainerRepository>loresoft/serilog-dashboard</ContainerRepository>
+    <ContainerImageTag>$(Version)</ContainerImageTag>
+  </PropertyGroup>
+
   <ItemGroup>
+    <ContainerPort Include="8080" />
     <ContainerPort Include="8081" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ContainerEnvironmentVariable Include="DASHBOARD__NAME" Value="Serilog Dashboard" />
+    <ContainerEnvironmentVariable Include="DASHBOARD__PROVIDER" Value="TableStorage" />
+    <ContainerEnvironmentVariable Include="DASHBOARD__CONNECTIONSTRING" Value="AzureWebJobsStorage" />
+    <ContainerEnvironmentVariable Include="DASHBOARD__DATASOURCES" Value="LogEvent" />
   </ItemGroup>
 
   <ItemGroup>
