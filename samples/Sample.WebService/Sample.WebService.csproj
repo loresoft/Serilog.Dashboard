@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Bogus" Version="35.6.3" />
+    <PackageReference Update="Bogus" Version="35.6.5" />
   </ItemGroup>
 
 </Project>
