@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="XUnit.Hosting" Version="4.0.0" />
+    <PackageReference Update="XUnit.Hosting" Version="4.1.0" />
   </ItemGroup>
 
 </Project>
